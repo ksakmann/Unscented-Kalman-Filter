@@ -40,7 +40,7 @@ UKF::UKF() {
   Xsig_pred_ = MatrixXd::Zero(n_x_, 2 * n_aug_ + 1);
 
   ///* time when the state is true, in us
-  time_us_ = 0;
+  previous_timestamp_ = 0;
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
   std_a_ = 3;
@@ -74,12 +74,10 @@ UKF::UKF() {
 
 
   /**
-  TODO:
-  
-  Complete the initialization. See ukf.h for other member properties.
-
-  Hint: one or more values initialized above might be wildly off...
+  See ukf.h for other member properties.
+  one or more values initialized above might be wildly off...
   */
+
 }
 
 UKF::~UKF() {}
@@ -89,12 +87,69 @@ UKF::~UKF() {}
  * either radar or laser.
  */
 void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
-  /**
-  TODO:
+  
+  /*****************************************************************************
+   *  Initialization
+   ****************************************************************************/
+  if (!is_initialized_) {
+    /*
+      * Initialize the state x_ with the first measurement.
+      * Create the covariance matrix.
+      * Remember: convert radar from polar to cartesian coordinates.
+    */
 
-  Complete this function! Make sure you switch between lidar and radar
-  measurements.
-  */
+    SetInitialValues(meas_package);
+
+    // count time from first first measurement onwards
+    previous_timestamp_ = meas_package.timestamp_;
+
+    // done initializing, no need to predict or update
+    is_initialized_ = true;
+
+    return;
+
+  }
+
+
+}
+
+void UKF::SetInitialValues(MeasurementPackage meas_package) {
+
+    // some pretty arbitrary state covariance matrix P 
+    P_ = MatrixXd(5, 5);
+    P_ <<   10, 0,  0,  0,  0,
+            0,  10, 0,  0,  0,
+            0,  0,  10, 0,  0,
+            0,  0,  0,  10, 0,
+            0,  0,  0,  0,  10;
+
+    if (meas_package.sensor_type_ == MeasurementPackage::RADAR) {
+      /*
+      Convert radar from polar to cartesian coordinates and initialize state.
+      */
+      float rho = meas_package.raw_measurements_(0);
+      float phi = meas_package.raw_measurements_(1);
+      float rhodot = meas_package.raw_measurements_(2);
+
+      float px = rho * cos(phi);
+      float py = rho * sin(phi);
+      float vx = rhodot * cos(phi);
+      float vy = rhodot * sin(phi);
+
+      x_ << px,py,sqrt(vx*vx +vy*vy),0,0;
+
+    } 
+
+    else if (meas_package.sensor_type_ == MeasurementPackage::LASER) {
+
+      /*
+      Initialize state.
+      */
+
+      x_ << meas_package.raw_measurements_(0),meas_package.raw_measurements_(1),0,0,0;
+
+    }
+
 }
 
 /**

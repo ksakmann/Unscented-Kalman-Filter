@@ -13,9 +13,17 @@ using Eigen::VectorXd;
 
 class UKF {
 public:
-
   ///* initially set to false, set to true in first call of ProcessMeasurement
   bool is_initialized_;
+
+  ///* State dimension
+  int n_x_;
+
+  ///* Augmented state dimension
+  int n_aug_;
+
+  ///* Sigma point spreading parameter
+  double lambda_;
 
   ///* if this is false, laser measurements will be ignored (except for init)
   bool use_laser_;
@@ -33,7 +41,7 @@ public:
   MatrixXd Xsig_pred_;
 
   ///* time when the state is true, in us
-  long long time_us_;
+  long long previous_timestamp_;
 
   ///* Process noise standard deviation longitudinal acceleration in m/s^2
   double std_a_;
@@ -59,14 +67,6 @@ public:
   ///* Weights of sigma points
   VectorXd weights_;
 
-  ///* State dimension
-  int n_x_;
-
-  ///* Augmented state dimension
-  int n_aug_;
-
-  ///* Sigma point spreading parameter
-  double lambda_;
 
   ///* the current NIS for radar
   double NIS_radar_;
@@ -90,6 +90,11 @@ public:
    */
   void ProcessMeasurement(MeasurementPackage meas_package);
 
+  /**
+   * SetInitialValues
+   * @param meas_package Use the first measurement to initialize the filter
+   */
+  void SetInitialValues(MeasurementPackage meas_package);
   /**
    * Prediction Predicts sigma points, the state, and the state covariance
    * matrix
