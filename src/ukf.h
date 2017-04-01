@@ -97,11 +97,22 @@ public:
   void SetInitialValues(MeasurementPackage meas_package);
 
   /**
-   * AugmentedSigmaPoints
+   * Computes the AugmentedSigmaPoints
    * @param Xsig_out reference to augmented sigma point matrix
    */
   void AugmentedSigmaPoints(MatrixXd &Xsig_out);
 
+  /**
+  * Predicts the augmented sigma points 
+  * @param Xsig_out reference to predicted augmented sigma point matrix
+  */
+  void SigmaPointPrediction(MatrixXd  &Xsig_aug, const double delta_t, MatrixXd  &Xsig_out);
+
+  /**
+  * Predicts the mean and covariance
+  * @param predicted state vector x_out covariance matrix P_out
+  */
+  void PredictMeanAndCovariance(const MatrixXd &Xsig_pred, VectorXd &x_out, MatrixXd &P_out);
   /**
    * Prediction Predicts sigma points, the state, and the state covariance
    * matrix
