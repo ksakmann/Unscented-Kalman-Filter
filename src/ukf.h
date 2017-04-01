@@ -95,6 +95,13 @@ public:
    * @param meas_package Use the first measurement to initialize the filter
    */
   void SetInitialValues(MeasurementPackage meas_package);
+
+  /**
+   * AugmentedSigmaPoints
+   * @param Xsig_out reference to augmented sigma point matrix
+   */
+  void AugmentedSigmaPoints(MatrixXd &Xsig_out);
+
   /**
    * Prediction Predicts sigma points, the state, and the state covariance
    * matrix
