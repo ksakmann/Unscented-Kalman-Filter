@@ -67,7 +67,6 @@ public:
   ///* Weights of sigma points
   VectorXd weights_;
 
-
   ///* the current NIS for radar
   double NIS_radar_;
 
@@ -113,6 +112,10 @@ public:
   * @param predicted state vector x_out covariance matrix P_out
   */
   void PredictMeanAndCovariance(const MatrixXd &Xsig_pred, VectorXd &x_out, MatrixXd &P_out);
+
+
+  void PredictRadarMeasurement(VectorXd &z_out, MatrixXd &S_out);
+
   /**
    * Prediction Predicts sigma points, the state, and the state covariance
    * matrix
