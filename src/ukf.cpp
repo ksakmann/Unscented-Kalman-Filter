@@ -132,11 +132,11 @@ void UKF::SetInitialValues(MeasurementPackage meas_package) {
 
   // initialize state covariance matrix P 
   P_ = MatrixXd(5, 5);
-  P_ <<   10, 0,  0,  0,  0,
-          0,  10, 0,  0,  0,
-          0,  0,  10, 0,  0,
-          0,  0,  0,  10, 0,
-          0,  0,  0,  0,  10;
+  P_ <<   0.1, 0,  0,  0,  0,
+          0,  0.1, 0,  0,  0,
+          0,  0,  0.1, 0,  0,
+          0,  0,  0,  0.1, 0,
+          0,  0,  0,  0,  0.1;
 
   if (meas_package.sensor_type_ == MeasurementPackage::RADAR) {
     
@@ -310,15 +310,6 @@ void UKF::PredictRadarMeasurement(VectorXd &z_out, MatrixXd &S_out) {
   //set measurement dimension, radar can measure r, phi, and r_dot
   int n_z = 3;
 
-  //create example matrix with predicted sigma points
-  MatrixXd Xsig_pred = MatrixXd(n_x_, 2 * n_aug_ + 1);
-  Xsig_pred <<
-         5.9374,  6.0640,   5.925,  5.9436,  5.9266,  5.9374,  5.9389,  5.9374,  5.8106,  5.9457,  5.9310,  5.9465,  5.9374,  5.9359,  5.93744,
-           1.48,  1.4436,   1.660,  1.4934,  1.5036,    1.48,  1.4868,    1.48,  1.5271,  1.3104,  1.4787,  1.4674,    1.48,  1.4851,    1.486,
-          2.204,  2.2841,  2.2455,  2.2958,   2.204,   2.204,  2.2395,   2.204,  2.1256,  2.1642,  2.1139,   2.204,   2.204,  2.1702,   2.2049,
-         0.5367, 0.47338, 0.67809, 0.55455, 0.64364, 0.54337,  0.5367, 0.53851, 0.60017, 0.39546, 0.51900, 0.42991, 0.530188,  0.5367, 0.535048,
-          0.352, 0.29997, 0.46212, 0.37633,  0.4841, 0.41872,   0.352, 0.38744, 0.40562, 0.24347, 0.32926,  0.2214, 0.28687,   0.352, 0.318159;
-
   //create matrix for sigma points in measurement space
   MatrixXd Zsig = MatrixXd(n_z, 2 * n_aug_ + 1);
 
@@ -326,10 +317,10 @@ void UKF::PredictRadarMeasurement(VectorXd &z_out, MatrixXd &S_out) {
   for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //2n+1 simga points
 
     // extract values for better readibility
-    double p_x = Xsig_pred(0,i);
-    double p_y = Xsig_pred(1,i);
-    double v  = Xsig_pred(2,i);
-    double yaw = Xsig_pred(3,i);
+    double p_x = Xsig_pred_(0,i);
+    double p_y = Xsig_pred_(1,i);
+    double v  = Xsig_pred_(2,i);
+    double yaw = Xsig_pred_(3,i);
 
     double v1 = cos(yaw)*v;
     double v2 = sin(yaw)*v;
