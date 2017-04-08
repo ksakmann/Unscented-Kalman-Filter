@@ -114,7 +114,15 @@ public:
   void PredictMeanAndCovariance(const MatrixXd &Xsig_pred, VectorXd &x_out, MatrixXd &P_out);
 
 
-  void PredictRadarMeasurement(VectorXd &z_out, MatrixXd &S_out);
+  /**
+  * Computes the predicted state in radar measurement space z_pred, the predicted covariance S and Tc 
+  */
+  void PredictRadarMeasurement(VectorXd &z_out, MatrixXd &S_out, MatrixXd &Tc_out);
+
+  /**
+  * Computes the predicted state in lidar measurement space z_pred, the predicted covariance S and Tc 
+  */
+  void PredictLidarMeasurement(VectorXd &z_out, MatrixXd &S_out, MatrixXd &Tc_out);
 
   /**
    * Prediction Predicts sigma points, the state, and the state covariance
@@ -127,13 +135,13 @@ public:
    * Updates the state and the state covariance matrix using a laser measurement
    * @param meas_package The measurement at k+1
    */
-  void UpdateLidar(MeasurementPackage meas_package);
+  void UpdateLidar(MeasurementPackage meas_package, VectorXd &z_pred, MatrixXd &Tc, MatrixXd &S);
 
   /**
    * Updates the state and the state covariance matrix using a radar measurement
    * @param meas_package The measurement at k+1
    */
-  void UpdateRadar(MeasurementPackage meas_package);
+  void UpdateRadar(MeasurementPackage meas_package, VectorXd &z_pred, MatrixXd &Tc, MatrixXd &S);
 };
 
 #endif /* UKF_H */
