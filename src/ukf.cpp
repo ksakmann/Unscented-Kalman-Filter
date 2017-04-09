@@ -360,6 +360,15 @@ void UKF::PredictRadarMeasurement(VectorXd &z_out, MatrixXd &S_out, MatrixXd &Tc
     double v = Xsig_pred_(2,i);
     double yaw = Xsig_pred_(3,i);
 
+    // Avoid division by zero
+    if(fabs(p_x) <= 0.0001){
+            p_x = 0.0001;
+    }
+    if(fabs(p_y) <= 0.0001){
+            p_y = 0.0001;
+    }
+
+
     double v1 = cos(yaw)*v;
     double v2 = sin(yaw)*v;
 
