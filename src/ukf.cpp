@@ -28,7 +28,7 @@ UKF::UKF() {
   use_laser_ = true;
 
   // if this is false, radar measurements will be ignored (except during init)
-  use_radar_ = false;
+  use_radar_ = true;
 
   // initial state vector
   x_ = VectorXd(5);
@@ -43,10 +43,10 @@ UKF::UKF() {
   previous_timestamp_ = 0;
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 0.9;
+  std_a_ = 4;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 0.55;
+  std_yawdd_ = 0.6;
 
   // Laser measurement noise standard deviation position1 in m
   std_laspx_ = 0.15;
@@ -108,16 +108,16 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
 
 
   double delta_t =  (meas_package.timestamp_ - previous_timestamp_) / 1000000.0;
-//  while (delta_t > 0.1)
-//  {
+  while (delta_t > 0.1)
+  {
 //  cout<< "delta_t: " << delta_t << endl;
 //  cout << "Press ENTER to continue...";
 //    cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
   
-//  const double dt = 0.05;
-//  Prediction(dt);
-//  delta_t -= dt;
-//  }
+  const double dt = 0.05;
+  Prediction(dt);
+  delta_t -= dt;
+  }
 
   Prediction(delta_t);
 
