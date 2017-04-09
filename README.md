@@ -1,7 +1,28 @@
-# Unscented Kalman Filter Project Starter Code
+# Unscented Kalman Filter Project 
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+## Introduction
+The unscented Kalman filter is a way to improve on the extended Kalman Filter. Unlike the EKF the UKF does not linearize the 
+state equations. It relies on constructing sigma points that get propagated through the state vector model. 
+
+Shown below are the results of this project for two datasets.
+
+[//]: # (Image References)
+[image1]: ./images/position.png
+[image2]: ./images/NIS.png
+
+![UKF prediction][image1]
+
+The noise parameters were chosen in such a way to make the normalized innovation squared close to its statistically expected value.
+The radar measurement space is three dimensional (rho, phi, rho_dot) and the chi-squared value for a 95% confidence intervall is 7.8.
+The lidar measurement space is two dimensional (x,y) and the chi-squared value for a 95% confidence intervall is 6. Averaging these 
+two one would expect about 5% of all predicted states to have a chi-squared value of 7 or higher. This is approximately true 
+for the chosen noise parameters. 
+
+
+![NIS][image2]
+
 
 ## Dependencies
 
@@ -20,9 +41,7 @@ Self-Driving Car Engineer Nanodegree Program
 
 ## Editor Settings
 
-We've purposefully kept editor configuration files out of this repo in order to
-keep it as simple and environment agnostic as possible. However, we recommend
-using the following settings:
+Use the following settings:
 
 * indent using spaces
 * set tab width to 2 spaces (keeps the matrices in source code aligned)
@@ -32,8 +51,6 @@ using the following settings:
 Please stick to [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html) as much as possible.
 
 ## Generating Additional Data
-
-This is optional!
 
 If you'd like to generate your own radar and lidar data, see the
 [utilities repo](https://github.com/udacity/CarND-Mercedes-SF-Utilities) for
