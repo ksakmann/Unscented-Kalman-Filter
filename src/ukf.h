@@ -22,6 +22,12 @@ public:
   ///* Augmented state dimension
   int n_aug_;
 
+ //* radar measurement dimension
+  int n_zlas_;
+
+ //* radar measurement dimension
+  int n_zrad_;
+
   ///* Sigma point spreading parameter
   double lambda_;
 
@@ -87,13 +93,13 @@ public:
    * ProcessMeasurement
    * @param meas_package The latest measurement data of either radar or laser
    */
-  void ProcessMeasurement(MeasurementPackage meas_package);
+  void ProcessMeasurement(const MeasurementPackage meas_package);
 
   /**
    * SetInitialValues
    * @param meas_package Use the first measurement to initialize the filter
    */
-  void SetInitialValues(MeasurementPackage meas_package);
+  void SetInitialValues(const MeasurementPackage meas_package);
 
   /**
    * Computes the AugmentedSigmaPoints
@@ -105,7 +111,7 @@ public:
   * Predicts the augmented sigma points 
   * @param Xsig_out reference to predicted augmented sigma point matrix
   */
-  void SigmaPointPrediction(MatrixXd  &Xsig_aug, const double delta_t, MatrixXd  &Xsig_out);
+  void SigmaPointPrediction(const MatrixXd  &Xsig_aug, const double delta_t, MatrixXd  &Xsig_out);
 
   /**
   * Predicts the mean and covariance
